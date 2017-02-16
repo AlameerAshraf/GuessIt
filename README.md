@@ -9,4 +9,4 @@ GuessIt,Hey!
   Player's mission is to correctly Guess the word before the other player , Each player has an account , 
   and has the accessability to create a playing area in which he can compete other players . 
  </p> 
- 
+ <p> MasterServer , clients , chat <p>
