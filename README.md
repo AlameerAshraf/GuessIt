@@ -1,4 +1,4 @@
-# Hey-GuessIt
+# GuessIt
 GuessIt,Hey!
 <h2> Socket Programming Based Game - Multiple Players </h2> 
 <p> 
