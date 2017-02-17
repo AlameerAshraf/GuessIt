@@ -13,6 +13,7 @@ using System.Threading;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Players;
+using master; 
 
 
 namespace Player1
@@ -60,10 +61,10 @@ namespace Player1
             //Reader = new BinaryReader(Stream);
             BinaryFormatter bin = new BinaryFormatter();
 
-            var IncomingPlyer = (List<Player>)bin.Deserialize(Stream);
+            var IncomingPlyer = (List<master.Player>)bin.Deserialize(Stream);
             foreach(var i in IncomingPlyer)
             {
-                MessageBox.Show(i.ToString()); 
+                MessageBox.Show(i.PlayersName); 
             }
 
         }

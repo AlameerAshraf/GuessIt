@@ -163,5 +163,11 @@ namespace master
             info.AddValue("PlyerId", PlyersId);
             info.AddValue("PlyerStutes", PlyersStutes); 
         }
+        public Player(SerializationInfo info, StreamingContext ctxt)
+        {
+            PlayersName = (string)info.GetValue("PlyerName", typeof(string));
+            PlyersId = (int)info.GetValue("PlyerId", typeof(int));
+            PlyersStutes = (string)info.GetValue("PlyerStutes", typeof(string));
+        }
     }
 }
