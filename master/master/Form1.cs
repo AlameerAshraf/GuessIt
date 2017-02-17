@@ -5,6 +5,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.IO;
 using System.Threading;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary; 
 
 
 
@@ -24,7 +26,6 @@ namespace master
         TcpListener Started;
         List<Player> players;
         bool Flag = true;
-        string[] arr; 
         public Form1()
         {
             InitializeComponent();
@@ -35,6 +36,15 @@ namespace master
 
         }
 
+
+        public void BroadcastingPlayers() // O(n^2)
+        {
+            foreach ( Player P in players )
+            {
+                P.DataSender(players);
+            }
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             button1.Enabled = false;
@@ -42,14 +52,17 @@ namespace master
             IPAddress Iaddress = new IPAddress(Ip);
             Started = new TcpListener(Iaddress, 9999);
             Started.Start();
-            Thread TH2 = new Thread(Oops);
+            players = new List<Player>(); 
+            Thread TH2 = new Thread(MainFunction);
             TH2.Start();
         }
-        public void Oops()
+        public void MainFunction()
         {
             while (Flag)
             {
                 Player Pl = new Player(Started.AcceptSocket(), listView1);
+                players.Add(Pl);
+                BroadcastingPlayers();
             }  
         }
         private void button2_Click(object sender, EventArgs e)
@@ -58,19 +71,31 @@ namespace master
             Flag = false; 
             Started.Stop(); 
         }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            foreach (Player pl in players)
+            {
+                MessageBox.Show(pl.Row[1]);
+            }
+            
+        }
     }
 
-    public class Player
+    [Serializable()]
+    public class Player : ISerializable
     {
         Thread Th1;
         Socket Dummy;
         NetworkStream Stream;
         BinaryReader WhoReads;
         BinaryWriter WhoWrites;
-        string PlayersName;
-        string PlayersPassword;
-        string[] Row;
-        ListView PanelControl;
+        public string PlayersName;
+        public int PlyersId;
+        public string PlyersStutes; 
+        //string PlayersPassword;
+        public string[] Row;
+        ListView PanelControl; 
         
         public Player(Socket ObjFromSocket , ListView Li  )
         {
@@ -78,6 +103,14 @@ namespace master
             PanelControl = Li; 
             Th1 = new Thread(Run);     
             Th1.Start(); 
+        }
+
+        public void DataSender( List<Player> PlayersList)
+        {
+            Stream = new NetworkStream(Dummy);
+            WhoWrites = new BinaryWriter(Stream);
+            BinaryFormatter List = new BinaryFormatter();
+            List.Serialize(Stream, PlayersList); 
         }
 
         public bool SocketActive (Socket s)
@@ -98,11 +131,12 @@ namespace master
                 try
                 {
                     PlayersName = WhoReads.ReadString();
+                    PlyersId = 1;
+                    PlyersStutes = "Online";
                     Th1.Name = PlayersName;
-                    MessageBox.Show(PlayersName);
-                    Row = new string[] { "1", PlayersName, "Online" };
+                    Row = new string[] { PlyersId.ToString(), PlayersName, PlyersStutes };
                     var li = new ListViewItem(Row);
-                    PanelControl.Items.Add(li);
+                    PanelControl.Items.Add(li);        
                 }
                 catch
                 {
@@ -110,17 +144,24 @@ namespace master
                 }
             }
             while (SocketActive(Dummy));
-
+            PlyersStutes = "Offline";
             foreach (ListViewItem item in PanelControl.Items)
             {
                 if (item.SubItems[1].Text== PlayersName)
                 {
-                  item.SubItems[2].Text = "Offline";
+                  item.SubItems[2].Text = PlyersStutes;
                 }
             }
 
             Dummy.Close(); 
 
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("PlyerName", PlayersName);
+            info.AddValue("PlyerId", PlyersId);
+            info.AddValue("PlyerStutes", PlyersStutes); 
         }
     }
 }

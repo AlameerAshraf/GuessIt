@@ -7,3 +7,12 @@ C:\Users\apple\Desktop\master\master\obj\Debug\master.Properties.Resources.resou
 C:\Users\apple\Desktop\master\master\obj\Debug\master.csproj.GenerateResource.Cache
 C:\Users\apple\Desktop\master\master\obj\Debug\master.exe
 C:\Users\apple\Desktop\master\master\obj\Debug\master.pdb
+C:\Users\apple\Documents\GitHub\GuessIt\master\master\bin\Debug\master.exe.config
+C:\Users\apple\Documents\GitHub\GuessIt\master\master\obj\Debug\master.exe
+C:\Users\apple\Documents\GitHub\GuessIt\master\master\obj\Debug\master.pdb
+C:\Users\apple\Documents\GitHub\GuessIt\master\master\bin\Debug\master.exe
+C:\Users\apple\Documents\GitHub\GuessIt\master\master\bin\Debug\master.pdb
+C:\Users\apple\Documents\GitHub\GuessIt\master\master\obj\Debug\master.csprojResolveAssemblyReference.cache
+C:\Users\apple\Documents\GitHub\GuessIt\master\master\obj\Debug\master.Form1.resources
+C:\Users\apple\Documents\GitHub\GuessIt\master\master\obj\Debug\master.Properties.Resources.resources
+C:\Users\apple\Documents\GitHub\GuessIt\master\master\obj\Debug\master.csproj.GenerateResource.Cache
