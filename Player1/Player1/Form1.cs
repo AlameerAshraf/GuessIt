@@ -11,7 +11,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.IO;
-using Players;
+using System.Runtime.Serialization.Formatters.Binary;
+using master;
 
 namespace Player1
 {
@@ -21,6 +22,8 @@ namespace Player1
         NetworkStream Stream;
         BinaryReader Reader;
         BinaryWriter Writer;
+        string Receiver;
+        string Message; 
         string PlayersName = "Alameer Ashraf";
         public Form1()
         {
@@ -51,13 +54,40 @@ namespace Player1
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            BinaryFormatter bin = new BinaryFormatter();
 
+            var IncomingPlyer = (List<Player>)bin.Deserialize(Stream);
+            foreach (var i in IncomingPlyer)
+            {
+                comboBox1.Items.Add(i.PlayersName);
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             Reader = new BinaryReader(Stream);
             textBox4.Text = Reader.ReadString();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Receiver = comboBox1.SelectedItem.ToString();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (textBox1.Text == "")
+            {
+                MessageBox.Show("Please Insert Mesage To send"); 
+            }
+            else
+            {
+                Message = textBox1.Text;
+                Stream = Player.GetStream();
+                Writer = new BinaryWriter(Stream);
+                Writer.Write(PlayersName+","+Message+","+Receiver);
+
+            }
         }
     }
 

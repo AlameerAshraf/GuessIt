@@ -19,6 +19,11 @@ using System.Runtime.Serialization.Formatters.Binary;
         }
  /* */
 
+    // rec online !
+    // message 
+    // owneer   
+
+
 namespace master
 {
     public partial class Form1 : Form
@@ -77,6 +82,7 @@ namespace master
             foreach (Player pl in players)
             {
                 MessageBox.Show(pl.Row[1]);
+                MessageBox.Show(pl.PlyersStutes); 
             }
             
         }

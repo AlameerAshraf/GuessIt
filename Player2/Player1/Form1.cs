@@ -53,19 +53,20 @@ namespace Player1
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            BinaryFormatter bin = new BinaryFormatter();
 
+            var IncomingPlyer = (List<master.Player>)bin.Deserialize(Stream);
+            foreach (var i in IncomingPlyer)
+            {
+                comboBox1.Items.Add(i.PlayersName);
+            }
+            
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             //Reader = new BinaryReader(Stream);
-            BinaryFormatter bin = new BinaryFormatter();
-
-            var IncomingPlyer = (List<master.Player>)bin.Deserialize(Stream);
-            foreach(var i in IncomingPlyer)
-            {
-                MessageBox.Show(i.PlayersName); 
-            }
+         
 
         }
     }
