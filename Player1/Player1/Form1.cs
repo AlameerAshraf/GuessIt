@@ -98,7 +98,8 @@ namespace Player1
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (textBox1.Text == "")
+            button2.Enabled = false;
+            if (String.IsNullOrEmpty(textBox1.Text))
             {
                 MessageBox.Show("Please Insert Mesage To send"); 
             }
@@ -106,9 +107,11 @@ namespace Player1
             {
                 Message = textBox1.Text;
                 Stream = Player.GetStream();
+                //Send Data Over The Stream ! 
                 Writer = new BinaryWriter(Stream);
                 Writer.Write(PlayersName+","+Message+","+Receiver);
-
+                textBox2.Text += "Me :" + Message;
+                textBox2.AppendText(Environment.NewLine);
             }
         }
 
@@ -117,6 +120,10 @@ namespace Player1
             Player.Close();
         }
 
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            button2.Enabled = true;
+        }
     }
 
 

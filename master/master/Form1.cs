@@ -42,7 +42,7 @@ namespace master
         }
 
 
-        public void BroadcastingPlayers() // O(n^2)
+        public void BroadcastingPlayers() // O(n)
         {
             foreach ( Player P in players )
             {
@@ -100,9 +100,10 @@ namespace master
         public string PlyersStutes; 
         //string PlayersPassword;
         public string[] Row;
+        //List<Player> InternalPlyersList; 
         ListView PanelControl; 
         
-        public Player(Socket ObjFromSocket , ListView Li  )
+        public Player(Socket ObjFromSocket , ListView Li )
         {
             Dummy = ObjFromSocket;
             PanelControl = Li; 
@@ -116,6 +117,21 @@ namespace master
             WhoWrites = new BinaryWriter(Stream);
             BinaryFormatter List = new BinaryFormatter();
             List.Serialize(Stream, PlayersList); 
+        }
+
+
+        public void ConnectClient (string MessageFromAnotherClient)
+        {
+            Stream = new NetworkStream(Dummy);
+            WhoWrites = new BinaryWriter(Stream);
+            WhoWrites.Write(MessageFromAnotherClient);
+        }
+
+        public void ReceiveMessageToSendItToAnotherClient()
+        {
+            Stream = new NetworkStream(Dummy);
+            WhoReads = new BinaryReader(Stream);
+
         }
 
         public bool SocketActive (Socket s)
@@ -142,6 +158,7 @@ namespace master
                     Row = new string[] { PlyersId.ToString(), PlayersName, PlyersStutes };
                     var li = new ListViewItem(Row);
                     PanelControl.Items.Add(li);
+                    
                 }
                 catch 
                 {
