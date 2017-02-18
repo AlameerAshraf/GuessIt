@@ -28,6 +28,7 @@ namespace Player1
         public Form1()
         {
             InitializeComponent();
+            Control.CheckForIllegalCrossThreadCalls = false; 
             textBox3.Text = PlayersName;
 
             Player = new TcpClient();
@@ -54,12 +55,31 @@ namespace Player1
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            BinaryFormatter bin = new BinaryFormatter();
+            Thread Naming = new Thread(NamesLoader);
+            Naming.Start(); 
+        }
 
-            var IncomingPlyer = (List<Player>)bin.Deserialize(Stream);
-            foreach (var i in IncomingPlyer)
+        public void NamesLoader()
+        {
+            while(true)
             {
-                comboBox1.Items.Add(i.PlayersName);
+                try
+                {
+                    BinaryFormatter bin = new BinaryFormatter();
+
+                    var IncomingPlyer = (List<Player>)bin.Deserialize(Stream);
+                    foreach (var i in IncomingPlyer)
+                    {
+                        if (i.PlyersStutes == "Online" && !comboBox1.Items.Contains(i.PlayersName))
+                        {
+                            comboBox1.Items.Add(i.PlayersName);
+                        }
+                    }
+                }
+                catch (NullReferenceException)
+                {
+                    MessageBox.Show("Loading Players Will Take Seconds");
+                }
             }
         }
 

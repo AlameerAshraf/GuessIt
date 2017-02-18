@@ -79,12 +79,11 @@ namespace master
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            foreach (Player pl in players)
-            {
-                MessageBox.Show(pl.Row[1]);
-                MessageBox.Show(pl.PlyersStutes); 
-            }
-            
+            //foreach (Player pl in players)
+            //{
+            //    MessageBox.Show(pl.Row[1]);
+            //    MessageBox.Show(pl.PlyersStutes); 
+            //}
         }
     }
 

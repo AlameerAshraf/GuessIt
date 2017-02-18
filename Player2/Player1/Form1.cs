@@ -12,7 +12,6 @@ using System.Net.Sockets;
 using System.Threading;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using Players;
 using master; 
 
 
@@ -28,6 +27,7 @@ namespace Player1
         public Form1()
         {
             InitializeComponent();
+            Control.CheckForIllegalCrossThreadCalls = false; 
             textBox3.Text = PlayersName;
 
             Player = new TcpClient();
@@ -53,14 +53,31 @@ namespace Player1
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            BinaryFormatter bin = new BinaryFormatter();
-
-            var IncomingPlyer = (List<master.Player>)bin.Deserialize(Stream);
-            foreach (var i in IncomingPlyer)
+            Thread Naming = new Thread(NamesLoader);
+            Naming.Start();
+        }
+        public void NamesLoader()
+        {
+            while (true)
             {
-                comboBox1.Items.Add(i.PlayersName);
+                try
+                {
+                    BinaryFormatter bin = new BinaryFormatter();
+
+                    var IncomingPlyer = (List<Player>)bin.Deserialize(Stream);
+                    foreach (var i in IncomingPlyer)
+                    {
+                        if (i.PlyersStutes == "Online" && !comboBox1.Items.Contains(i.PlayersName))
+                        {
+                            comboBox1.Items.Add(i.PlayersName);
+                        }
+                    }
+                }
+                catch (NullReferenceException)
+                {
+                    MessageBox.Show("Loading Players Will Take Seconds");
+                }
             }
-            
         }
 
         private void button3_Click(object sender, EventArgs e)
