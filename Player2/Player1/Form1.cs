@@ -77,10 +77,7 @@ namespace Player1
                 {
                     MessageBox.Show("Loading Players Will Take Seconds");
                 }
-                catch(IOException)
-                {
-
-                }
+                catch { } //Io Exceptopn . Server Closed and client expect for incoming data !
             }
         }
 
