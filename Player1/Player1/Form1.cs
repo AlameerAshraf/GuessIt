@@ -22,6 +22,7 @@ namespace Player1
         NetworkStream Stream;
         BinaryReader Reader;
         BinaryWriter Writer;
+        Thread Naming;
         string Receiver;
         string Message; 
         string PlayersName = "Alameer Ashraf";
@@ -55,13 +56,13 @@ namespace Player1
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            Thread Naming = new Thread(NamesLoader);
-            Naming.Start(); 
+                Naming = new Thread(NamesLoader);
+                Naming.Start();
         }
 
         public void NamesLoader()
         {
-            while(true)
+            while (true)
             {
                 try
                 {
@@ -80,6 +81,7 @@ namespace Player1
                 {
                     MessageBox.Show("Loading Players Will Take Seconds");
                 }
+                catch { } //IOExceptopn . Server Closed and client expect for incoming data !
             }
         }
 
@@ -109,6 +111,12 @@ namespace Player1
 
             }
         }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Player.Close();
+        }
+
     }
 
 

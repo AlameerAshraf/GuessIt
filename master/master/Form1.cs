@@ -141,11 +141,12 @@ namespace master
                     Th1.Name = PlayersName;
                     Row = new string[] { PlyersId.ToString(), PlayersName, PlyersStutes };
                     var li = new ListViewItem(Row);
-                    PanelControl.Items.Add(li);        
+                    PanelControl.Items.Add(li);
                 }
-                catch
+                catch 
                 {
-                    MessageBox.Show("oops");
+                   // MessageBox.Show("EndOfStream Exception Handling");
+                   // We have to pass it one time to get the things Rigth
                 }
             }
             while (SocketActive(Dummy));

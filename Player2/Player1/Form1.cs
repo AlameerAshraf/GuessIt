@@ -77,6 +77,10 @@ namespace Player1
                 {
                     MessageBox.Show("Loading Players Will Take Seconds");
                 }
+                catch(IOException)
+                {
+
+                }
             }
         }
 
@@ -85,6 +89,11 @@ namespace Player1
             //Reader = new BinaryReader(Stream);
          
 
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Player.Close();
         }
     }
 }
