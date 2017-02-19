@@ -74,7 +74,7 @@ namespace Player1
                         if (i.PlyersStutes == "Online" && !comboBox1.Items.Contains(i.PlayersName))
                         {
                             comboBox1.Items.Add(i.PlayersName);
-                        }
+                        }  
                     }
                 }
                 catch (NullReferenceException)

@@ -100,7 +100,7 @@ namespace Player1
         {
             button2.Enabled = false;
             if (String.IsNullOrEmpty(textBox1.Text))
-            {
+            { 
                 MessageBox.Show("Please Insert Mesage To send"); 
             }
             else
