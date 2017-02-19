@@ -38,26 +38,17 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.button2 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.RoomlistView = new System.Windows.Forms.ListView();
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader12 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader13 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(14, 15);
-            this.button1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button1.Location = new System.Drawing.Point(12, 12);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(87, 28);
+            this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
-            this.button1.Text = "Run";
+            this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -65,23 +56,21 @@
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(14, 50);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.tabControl1.Location = new System.Drawing.Point(12, 41);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(710, 361);
+            this.tabControl1.Size = new System.Drawing.Size(609, 293);
             this.tabControl1.TabIndex = 1;
             // 
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.listView1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 25);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabPage1.Size = new System.Drawing.Size(702, 332);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(601, 267);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Players";
+            this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // listView1
@@ -91,10 +80,9 @@
             this.columnHeader2,
             this.columnHeader3});
             this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView1.Location = new System.Drawing.Point(3, 4);
-            this.listView1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.listView1.Location = new System.Drawing.Point(3, 3);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(696, 324);
+            this.listView1.Size = new System.Drawing.Size(595, 261);
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -116,22 +104,19 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.RoomlistView);
-            this.tabPage2.Location = new System.Drawing.Point(4, 25);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabPage2.Size = new System.Drawing.Size(702, 332);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(601, 267);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Rooms";
+            this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(108, 15);
-            this.button2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button2.Location = new System.Drawing.Point(93, 12);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(87, 28);
+            this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 2;
             this.button2.Text = "button2";
             this.button2.UseVisualStyleBackColor = true;
@@ -140,77 +125,27 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(297, 26);
+            this.label1.Location = new System.Drawing.Point(255, 21);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(42, 17);
+            this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 3;
             this.label1.Text = "label1";
             // 
-            // RoomlistView
-            // 
-            this.RoomlistView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader5,
-            this.columnHeader4,
-            this.columnHeader8,
-            this.columnHeader9,
-            this.columnHeader12,
-            this.columnHeader13});
-            this.RoomlistView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RoomlistView.Location = new System.Drawing.Point(3, 4);
-            this.RoomlistView.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.RoomlistView.Name = "RoomlistView";
-            this.RoomlistView.Size = new System.Drawing.Size(696, 324);
-            this.RoomlistView.TabIndex = 2;
-            this.RoomlistView.UseCompatibleStateImageBehavior = false;
-            this.RoomlistView.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader5
-            // 
-            this.columnHeader5.Text = "Room Name ";
-            this.columnHeader5.Width = 144;
-            // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Text = "Room_Owner";
-            this.columnHeader4.Width = 110;
-            // 
-            // columnHeader8
-            // 
-            this.columnHeader8.Text = "Room_Status";
-            this.columnHeader8.Width = 96;
-            // 
-            // columnHeader9
-            // 
-            this.columnHeader9.Text = "Category";
-            this.columnHeader9.Width = 125;
-            // 
-            // columnHeader12
-            // 
-            this.columnHeader12.Text = "Difficulty";
-            this.columnHeader12.Width = 90;
-            // 
-            // columnHeader13
-            // 
-            this.columnHeader13.Text = "Play";
-            this.columnHeader13.Width = 154;
-            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(738, 426);
+            this.ClientSize = new System.Drawing.Size(633, 346);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.button1);
-            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Form1";
             this.Text = "Form1";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.tabPage2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -228,13 +163,6 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ListView RoomlistView;
-        private System.Windows.Forms.ColumnHeader columnHeader5;
-        private System.Windows.Forms.ColumnHeader columnHeader4;
-        private System.Windows.Forms.ColumnHeader columnHeader8;
-        private System.Windows.Forms.ColumnHeader columnHeader9;
-        private System.Windows.Forms.ColumnHeader columnHeader12;
-        private System.Windows.Forms.ColumnHeader columnHeader13;
     }
 }
 

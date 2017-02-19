@@ -16,14 +16,3 @@ C:\Users\apple\Documents\GitHub\GuessIt\master\master\obj\Debug\master.csproj.Ge
 C:\Users\apple\Documents\GitHub\GuessIt\master\master\bin\Debug\master.exe.config
 C:\Users\apple\Documents\GitHub\GuessIt\master\master\bin\Debug\master.exe
 C:\Users\apple\Documents\GitHub\GuessIt\master\master\obj\Debug\master.exe
-C:\Users\hhhhh\Downloads\GuessIt-master (1)\GuessIt-master\master\master\bin\Debug\master.exe.config
-C:\Users\hhhhh\Downloads\GuessIt-master (1)\GuessIt-master\master\master\obj\Debug\master.exe
-C:\Users\hhhhh\Downloads\GuessIt-master (1)\GuessIt-master\master\master\obj\Debug\master.pdb
-C:\Users\hhhhh\Downloads\GuessIt-master (1)\GuessIt-master\master\master\bin\Debug\master.exe
-C:\Users\hhhhh\Downloads\GuessIt-master (1)\GuessIt-master\master\master\bin\Debug\master.pdb
-C:\Users\hhhhh\Downloads\GuessIt-master (1)\GuessIt-master\master\master\bin\Debug\Newtonsoft.Json.dll
-C:\Users\hhhhh\Downloads\GuessIt-master (1)\GuessIt-master\master\master\bin\Debug\Newtonsoft.Json.xml
-C:\Users\hhhhh\Downloads\GuessIt-master (1)\GuessIt-master\master\master\obj\Debug\master.csprojResolveAssemblyReference.cache
-C:\Users\hhhhh\Downloads\GuessIt-master (1)\GuessIt-master\master\master\obj\Debug\master.Form1.resources
-C:\Users\hhhhh\Downloads\GuessIt-master (1)\GuessIt-master\master\master\obj\Debug\master.Properties.Resources.resources
-C:\Users\hhhhh\Downloads\GuessIt-master (1)\GuessIt-master\master\master\obj\Debug\master.csproj.GenerateResource.Cache
