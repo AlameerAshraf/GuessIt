@@ -6,7 +6,8 @@ using System.Net.Sockets;
 using System.IO;
 using System.Threading;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary; 
+using System.Runtime.Serialization.Formatters.Binary;
+using Newtonsoft.Json;
 
 
 
@@ -19,9 +20,9 @@ using System.Runtime.Serialization.Formatters.Binary;
         }
  /* */
 
-    // rec online !
-    // message 
-    // owneer   
+// rec online !
+// message 
+// owneer   
 
 
 namespace master
@@ -30,6 +31,7 @@ namespace master
     {
         TcpListener Started;
         List<Player> players;
+        
         bool Flag = true;
         public Form1()
         {
@@ -50,6 +52,7 @@ namespace master
             }
         }
 
+
         private void button1_Click(object sender, EventArgs e)
         {
             button1.Enabled = false;
@@ -65,7 +68,7 @@ namespace master
         {
             while (Flag)
             {
-                Player Pl = new Player(Started.AcceptSocket(), listView1);
+                Player Pl = new Player(Started.AcceptSocket(), listView1,RoomlistView);
                 players.Add(Pl);
                 BroadcastingPlayers();
             }  
@@ -101,12 +104,16 @@ namespace master
         //string PlayersPassword;
         public string[] Row;
         //List<Player> InternalPlyersList; 
-        ListView PanelControl; 
-        
-        public Player(Socket ObjFromSocket , ListView Li )
+        ListView PanelControl;
+        ListView RoomListView;
+        int check = 0;
+        List<CreatedRoom> RoomList;
+
+        public Player(Socket ObjFromSocket , ListView Li ,ListView RList)
         {
             Dummy = ObjFromSocket;
-            PanelControl = Li; 
+            PanelControl = Li;
+            RoomListView = RList;
             Th1 = new Thread(Run);     
             Th1.Start(); 
         }
@@ -151,13 +158,33 @@ namespace master
             {
                 try
                 {
-                    PlayersName = WhoReads.ReadString();
-                    PlyersId = 1;
-                    PlyersStutes = "Online";
-                    Th1.Name = PlayersName;
-                    Row = new string[] { PlyersId.ToString(), PlayersName, PlyersStutes };
-                    var li = new ListViewItem(Row);
-                    PanelControl.Items.Add(li);
+                    if(check==0)
+                    {
+                        PlayersName = WhoReads.ReadString();
+                        PlyersId = 1;
+                        PlyersStutes = "Online";
+                        Th1.Name = PlayersName;
+                        Row = new string[] { PlyersId.ToString(), PlayersName, PlyersStutes };
+                        var li = new ListViewItem(Row);
+                        PanelControl.Items.Add(li);
+
+                        check = 1;
+                    }
+                    else
+                    {
+                        //recieving room object
+                        string s = WhoReads.ReadString();
+                        var room = Newtonsoft.Json.JsonConvert.DeserializeObject<CreatedRoom>(s);
+                        string[] Row = new string[] { room.Name_Player,PlayersName, "ON", room.Category_Player, room.difficultly_Player.ToString() };  
+                        var li = new ListViewItem(Row);
+                        RoomListView.Items.Add(li);
+
+                        //broadcast new room to all players 
+                        WhoWrites = new BinaryWriter(Stream);
+                        CreatedRoom ss = new CreatedRoom { Category_Player = room.Category_Player, difficultly_Player = room.difficultly_Player, Name_Player = room.Name_Player };
+                        WhoWrites.Write(JsonConvert.SerializeObject(ss));       
+                    }
+                    
                     
                 }
                 catch 
@@ -193,4 +220,11 @@ namespace master
             PlyersStutes = (string)info.GetValue("PlyerStutes", typeof(string));
         }
     }
+    public class CreatedRoom
+    {
+        public string Category_Player { get; set; }
+        public int difficultly_Player { get; set; }
+        public string Name_Player { get; set; }
+    }
+
 }
