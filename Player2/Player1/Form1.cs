@@ -12,7 +12,8 @@ using System.Net.Sockets;
 using System.Threading;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using master; 
+using master;
+using Newtonsoft.Json;
 
 
 namespace Player1
@@ -55,6 +56,9 @@ namespace Player1
         {
             Thread Naming = new Thread(NamesLoader);
             Naming.Start();
+
+            Thread AllRooms = new Thread(RoomLoader);
+            AllRooms.Start();
         }
         public void NamesLoader()
         {
@@ -81,6 +85,28 @@ namespace Player1
             }
         }
 
+        public void RoomLoader()
+        {
+            while (true)
+            {
+                try
+                {
+                    //recieving room object
+                    string s = Reader.ReadString();
+                    var room = Newtonsoft.Json.JsonConvert.DeserializeObject<CreatedRoom>(s);
+                    string []Row = new string[] { room.Name_Player,PlayersName, "?",room.Category_Player,room.difficultly_Player.ToString() };
+                    MessageBox.Show(Row[0]+Row[1]+ Row[2]+ Row[3]);
+                    var li = new ListViewItem(Row);
+                    RoomlistView.Items.Add(li);
+                }
+                catch (NullReferenceException)
+                {
+                    //No rooms created yet
+                }
+                catch { }
+            }
+        }
+
         private void button3_Click(object sender, EventArgs e)
         {
             //Reader = new BinaryReader(Stream);
@@ -92,5 +118,26 @@ namespace Player1
         {
             Player.Close();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Rooms new_room = new Rooms();
+            new_room.ShowDialog();
+            ////new writer & with json object    
+            Writer = new BinaryWriter(Stream);
+            CreatedRoom ss = new CreatedRoom { Category_Player = new_room.Category_Player , difficultly_Player = new_room.difficultly_Player , Name_Player = new_room.Name_Player };
+            Writer.Write(JsonConvert.SerializeObject(ss));
+        }
+
+        private void RoomlistView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+    }
+    public class CreatedRoom
+    {
+        public string Category_Player { get; set; }
+        public int difficultly_Player { get; set; }
+        public string Name_Player { get; set; }
     }
 }
