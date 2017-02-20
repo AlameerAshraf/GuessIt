@@ -23,7 +23,8 @@ namespace Player1
         NetworkStream Stream;
         BinaryReader Reader;
         BinaryWriter Writer;
-        string PlayersName = "Sara Ramadan";
+        string PlayersName;
+        string Receiver; 
         public Form1()
         {
             InitializeComponent();
@@ -34,63 +35,95 @@ namespace Player1
             byte[] bt = new byte[] { 127, 0, 0, 1 };
             IPAddress localaddress = new IPAddress(bt);
             Player.Connect(localaddress, 9999);
-            try
-            {
-                Stream = Player.GetStream();
-                Writer = new BinaryWriter(Stream);
-                Writer.Write(PlayersName);
-            }
-            catch
-            {
-                MessageBox.Show("Connection Error");
-            }
-            finally
-            {
-                this.Refresh();
-            }
-
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            Thread Naming = new Thread(NamesLoader);
-            Naming.Start();
         }
+
+
         public void NamesLoader()
         {
+            Reader = new BinaryReader(Stream);
+            string PNames = null;
+            string[] Pairs;
+
             while (true)
             {
                 try
                 {
-                    BinaryFormatter bin = new BinaryFormatter();
-
-                    var IncomingPlyer = (List<Player>)bin.Deserialize(Stream);
-                    foreach (var i in IncomingPlyer)
+                    PNames = Reader.ReadString();
+                    Pairs = PNames.Split(',');//names,aass.jsjs,ksdhd.ksjd,
+                    if (Pairs[0] != "ChatMessage")
                     {
-                        if (i.PlyersStutes == "Online" && !comboBox1.Items.Contains(i.PlayersName))
+                        for (int i = 0; i < Pairs.Length - 1; i++)
                         {
-                            comboBox1.Items.Add(i.PlayersName);
-                        }  
+                            if (!comboBox1.Items.Contains(Pairs[i].Split('.')[1]))
+                            {
+                                comboBox1.Items.Add(Pairs[i].Split('.')[0]);
+                                listView1.Items.Add(Pairs[i].Split('.')[0], Pairs[i].Split('.')[1]);//name,status
+                            }
+                        }
+                    }
+                    else if (Pairs[0] == "ChatMessage") //chatmessage,sender,msg
+                    {
+                        textBox2.Text += Pairs[1] + ": " + Pairs[2]; //name: msg
                     }
                 }
-                catch (NullReferenceException)
-                {
-                    MessageBox.Show("Loading Players Will Take Seconds");
-                }
-                catch { } //Io Exceptopn . Server Closed and client expect for incoming data !
+                catch { }
             }
         }
-
         private void button3_Click(object sender, EventArgs e)
         {
-            //Reader = new BinaryReader(Stream);
-         
-
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             Player.Close();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Stream = Player.GetStream();
+                Writer = new BinaryWriter(Stream);
+                Writer.Write(textBox5.Text+","+textBox6.Text); // 1 = name , 2 = password
+                panel1.Visible = false;
+                Thread Naming = new Thread(NamesLoader);
+                Naming.Start();
+            }
+            catch
+            {
+                MessageBox.Show("Server Is Offline");
+            }
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            string ChatMessage;
+            Writer = new BinaryWriter(Stream);
+            ChatMessage = "ChatMessage" + "," + PlayersName + "," + Receiver + "," + textBox1.Text;
+
+            textBox2.Text += "Me:" + textBox1.Text;
+            textBox2.AppendText(Environment.NewLine);
+
+            Writer.Write(ChatMessage);
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            button2.Enabled = false; 
+            Receiver = comboBox1.SelectedItem.ToString();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            button2.Enabled = true;
         }
     }
 }

@@ -6,9 +6,10 @@ using System.Net.Sockets;
 using System.IO;
 using System.Threading;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary; 
+using System.Runtime.Serialization.Formatters.Binary;
+using Newtonsoft.Json;
 
-    
+
 
 /* /*
       async void connection()
@@ -19,9 +20,9 @@ using System.Runtime.Serialization.Formatters.Binary;
         }
  /* */
 
-    // rec online !
-    // message 
-    // owneer   
+// rec online !
+// message 
+// owneer   
 
 
 namespace master
@@ -29,7 +30,7 @@ namespace master
     public partial class Form1 : Form
     {
         TcpListener Started;
-        List<Player> players;
+        public static List<Player> players;
         bool Flag = true;
         public Form1()
         {
@@ -42,13 +43,6 @@ namespace master
         }
 
 
-        public void BroadcastingPlayers() // O(n)
-        {
-            foreach ( Player P in players )
-            {
-                P.DataSender(players);
-            }
-        }
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -65,9 +59,8 @@ namespace master
         {
             while (Flag)
             {
-                Player Pl = new Player(Started.AcceptSocket(), listView1);
+                Player Pl = new Player(Started.AcceptSocket(), listView1 , listView2);
                 players.Add(Pl);
-                BroadcastingPlayers();
             }  
         }
         private void button2_Click(object sender, EventArgs e)
@@ -79,59 +72,127 @@ namespace master
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            //foreach (Player pl in players)
-            //{
-            //    MessageBox.Show(pl.Row[1]);
-            //    MessageBox.Show(pl.PlyersStutes); 
-            //}
         }
     }
 
-    [Serializable()]
-    public class Player : ISerializable
+    //[Serializable()]
+    public class Player  //: ISerializable
     {
         Thread Th1;
         Socket Dummy;
         NetworkStream Stream;
         BinaryReader WhoReads;
         BinaryWriter WhoWrites;
-        public string PlayersName;
-        public int PlyersId;
+        public string[] PlyersData; // 1 = Name , 2 = Password , 3 = ID , 4 = state
+        public string[] RoomData;  //1 = name , 2 = level , 3 = cat , 4 = this.plyerdata[0] , 5 = anotherplyer , 6 = roomstate 
         public string PlyersStutes; 
-        //string PlayersPassword;
         public string[] Row;
-        //List<Player> InternalPlyersList; 
-        ListView PanelControl; 
+        public string[] Holder;
+        string Container;
+        public int Falg = 0; 
+        List<Room> RoomsOfThePlayer;
+        ListView PanelControl;
+        ListView PanelControlR;  
+             
         
-        public Player(Socket ObjFromSocket , ListView Li )
+        
+        public Player(Socket ObjFromSocket , ListView Li , ListView Li2 )
         {
             Dummy = ObjFromSocket;
-            PanelControl = Li; 
+            PanelControl = Li;
+            PanelControlR = Li2;
+            RoomsOfThePlayer = new List<Room>();
+            PlyersData = new string[3];
             Th1 = new Thread(Run);     
             Th1.Start(); 
+        }
+        public void BroadcastingPlayers(List<Player> Plyers) // O(n)
+        {
+            foreach (Player P in Plyers)
+            {
+                P.DataSender(Plyers); 
+            }
+        }
+
+        public void Thing ()
+        {
+            while (SocketActive(Dummy))
+            {
+                Stream = new NetworkStream(Dummy);
+                WhoReads = new BinaryReader(Stream);
+
+                Container = WhoReads.ReadString();
+                Holder = Container.Split(',');
+
+                if (Holder[0] == "ChatMessage") //"ChatMessage"+","+PlayersName+","+Receiver+","+textBox1.Text
+                {
+                    //MessageBox.Show(Holder[1] + " " + Holder[2] + " " + Holder[3]);
+                    ReceiveMessageToSendToAnotherClient(Holder);
+                }
+                else if (Holder[0] == "SendRoom")
+                {
+                    Room NewRoom = new Room();
+                    NewRoom.RoomName = Holder[1];
+                    NewRoom.RoomLevel = Holder[2];
+                    NewRoom.RoomCat = Holder[3];
+                    NewRoom.Owner = PlyersData[0];
+                    NewRoom.Player = null;
+                    NewRoom.RoomStutes = Holder[6];
+
+                    var lir = new ListViewItem(Holder);
+                    PanelControlR.Items.Add(lir);
+
+                    RoomsOfThePlayer.Add(NewRoom);
+                }
+                else if (Holder[0] == "ChangeRoomState")
+                {
+                    Room NewRoom = new Room();
+                    NewRoom.RoomName = Holder[1];
+                    NewRoom.RoomLevel = Holder[2];
+                    NewRoom.RoomCat = Holder[3];
+                    NewRoom.Owner = PlyersData[0];
+                    NewRoom.Player = null;
+                    NewRoom.RoomStutes = Holder[6];
+
+                    // Changing Procedure ! 
+                }
+            }
         }
 
         public void DataSender( List<Player> PlayersList)
         {
+            string PDataSentToClients = null;
             Stream = new NetworkStream(Dummy);
             WhoWrites = new BinaryWriter(Stream);
-            BinaryFormatter List = new BinaryFormatter();
-            List.Serialize(Stream, PlayersList); 
+            
+            foreach (var element in PlayersList)
+            { 
+                PDataSentToClients += element.PlyersData[0] + "." + element.PlyersData[1] + ",";                     
+            }
+            PDataSentToClients.Substring(0, PDataSentToClients.Length);
+            WhoWrites.Write(PDataSentToClients);
         }
 
 
         public void ConnectClient (string MessageFromAnotherClient)
         {
+            MessageBox.Show( this.PlyersData[0]);
             Stream = new NetworkStream(Dummy);
             WhoWrites = new BinaryWriter(Stream);
             WhoWrites.Write(MessageFromAnotherClient);
         }
 
-        public void ReceiveMessageToSendItToAnotherClient()
+        public void ReceiveMessageToSendToAnotherClient(string [] MessageInfromation)
         {
-            Stream = new NetworkStream(Dummy);
-            WhoReads = new BinaryReader(Stream);
-
+            MessageBox.Show("aaaa");
+            string Receiver = MessageInfromation[2];
+            foreach(Player P in Form1.players)
+            {
+                if (P.PlyersData[0] == Receiver)
+                {
+                    P.ConnectClient("ChatMessage"+","+ MessageInfromation[1]+","+MessageInfromation[3]);
+                }
+            }
         }
 
         public bool SocketActive (Socket s)
@@ -143,6 +204,8 @@ namespace master
             else
                 return true;
         }
+
+
         public void Run()
         { 
             Stream = new NetworkStream(Dummy);
@@ -151,46 +214,42 @@ namespace master
             {
                 try
                 {
-                    PlayersName = WhoReads.ReadString();
-                    PlyersId = 1;
-                    PlyersStutes = "Online";
-                    Th1.Name = PlayersName;
-                    Row = new string[] { PlyersId.ToString(), PlayersName, PlyersStutes };
-                    var li = new ListViewItem(Row);
-                    PanelControl.Items.Add(li);
-                    
+                    Container = WhoReads.ReadString();
+                    Holder = Container.Split(',');
+                    PlyersData[0] = Holder[0]; //name 
+                    PlyersData[1] = Holder[1]; //pass
+                    PlyersData[2] = "Online"; // state
+                    Th1.Name = Holder[1];
+
+                    Row = new string[] { PlyersData[0], PlyersData[2], "--BUTTON--" };
+                    var lip = new ListViewItem(Row);
+                    PanelControl.Items.Add(lip);
+
+                    BroadcastingPlayers(Form1.players);
+                    Thing();
                 }
-                catch 
-                {
-                   // MessageBox.Show("EndOfStream Exception Handling");
-                   // We have to pass it one time to get the things Rigth
-                }
+                catch {}
             }
             while (SocketActive(Dummy));
-            PlyersStutes = "Offline";
+            PlyersData[2] = "Offline"; 
             foreach (ListViewItem item in PanelControl.Items)
             {
-                if (item.SubItems[1].Text== PlayersName)
+                if (item.SubItems[0].Text == PlyersData[0])
                 {
-                  item.SubItems[2].Text = PlyersStutes;
+                    item.SubItems[1].Text = PlyersData[2];
                 }
             }
-
             Dummy.Close(); 
+        }
+    }
 
-        }
-
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue("PlyerName", PlayersName);
-            info.AddValue("PlyerId", PlyersId);
-            info.AddValue("PlyerStutes", PlyersStutes); 
-        }
-        public Player(SerializationInfo info, StreamingContext ctxt)
-        {
-            PlayersName = (string)info.GetValue("PlyerName", typeof(string));
-            PlyersId = (int)info.GetValue("PlyerId", typeof(int));
-            PlyersStutes = (string)info.GetValue("PlyerStutes", typeof(string));
-        }
+    class Room
+    {
+        public string RoomName;
+        public string RoomLevel;
+        public string RoomCat;
+        public string RoomStutes;
+        public string Owner;
+        public string Player;
     }
 }

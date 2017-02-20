@@ -13,6 +13,8 @@ C:\Users\apple\Documents\GitHub\GuessIt\master\master\obj\Debug\master.csprojRes
 C:\Users\apple\Documents\GitHub\GuessIt\master\master\obj\Debug\master.Form1.resources
 C:\Users\apple\Documents\GitHub\GuessIt\master\master\obj\Debug\master.Properties.Resources.resources
 C:\Users\apple\Documents\GitHub\GuessIt\master\master\obj\Debug\master.csproj.GenerateResource.Cache
+C:\Users\apple\Documents\GitHub\GuessIt\master\master\bin\Debug\Newtonsoft.Json.dll
+C:\Users\apple\Documents\GitHub\GuessIt\master\master\bin\Debug\Newtonsoft.Json.xml
 C:\Users\apple\Documents\GitHub\GuessIt\master\master\bin\Debug\master.exe.config
 C:\Users\apple\Documents\GitHub\GuessIt\master\master\bin\Debug\master.exe
 C:\Users\apple\Documents\GitHub\GuessIt\master\master\obj\Debug\master.exe

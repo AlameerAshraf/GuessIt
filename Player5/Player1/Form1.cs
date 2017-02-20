@@ -20,7 +20,7 @@ namespace Player1
         NetworkStream Stream;
         BinaryReader Reader;
         BinaryWriter Writer;
-        string PlayersName = "Alameer Ashraf";
+        string PlayersName = "Alameer Ashraf 1";
         public Form1()
         {
             InitializeComponent();
