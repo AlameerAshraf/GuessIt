@@ -1,0 +1,9 @@
+D:\intake 37 SD\Project_C#\server\server\obj\Debug\server.Form1.resources
+D:\intake 37 SD\Project_C#\server\server\obj\Debug\server.KeyBoard.resources
+D:\intake 37 SD\Project_C#\server\server\obj\Debug\server.Properties.Resources.resources
+D:\intake 37 SD\Project_C#\server\server\obj\Debug\server.csproj.GenerateResource.Cache
+D:\intake 37 SD\Project_C#\server\server\bin\Debug\server.exe
+D:\intake 37 SD\Project_C#\server\server\bin\Debug\server.pdb
+D:\intake 37 SD\Project_C#\server\server\obj\Debug\server.exe
+D:\intake 37 SD\Project_C#\server\server\obj\Debug\server.pdb
+D:\intake 37 SD\Project_C#\server\server\obj\Debug\server.csprojResolveAssemblyReference.cache
