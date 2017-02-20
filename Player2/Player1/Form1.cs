@@ -58,7 +58,7 @@ namespace Player1
                     {
                         for (int i = 0; i < Pairs.Length - 1; i++)
                         {
-                            if (!comboBox1.Items.Contains(Pairs[i].Split('.')[1]))
+                            if (!comboBox1.Items.Contains(Pairs[i].Split('.')[0]))
                             {
                                 comboBox1.Items.Add(Pairs[i].Split('.')[0]);
                                 listView1.Items.Add(Pairs[i].Split('.')[0], Pairs[i].Split('.')[1]);//name,status
@@ -68,6 +68,10 @@ namespace Player1
                     else if (Pairs[0] == "ChatMessage") //chatmessage,sender,msg
                     {
                         textBox2.Text += Pairs[1] + ": " + Pairs[2]; //name: msg
+                    }
+                    else if (Pairs[0] == "WantToPlay")
+                    {
+
                     }
                 }
                 catch { }
@@ -124,6 +128,11 @@ namespace Player1
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             button2.Enabled = true;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

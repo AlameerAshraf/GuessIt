@@ -20,12 +20,16 @@ namespace Player1
 {
     public partial class Form1 : Form
     {
-       
-        TcpClient Player;
-        NetworkStream Stream;
-        BinaryReader Reader;
-        BinaryWriter Writer;
-        string PlayersName;
+        public int myVar;
+
+
+        public event EventHandler ShowOtherForm;
+
+        public TcpClient Player;
+        public NetworkStream Stream;
+        public BinaryReader Reader;
+        public BinaryWriter Writer;
+        public string PlayersName;
         string Receiver;
         public Form1()
         {
@@ -40,7 +44,7 @@ namespace Player1
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            button2.Enabled = false;
+            button2.Enabled = false;  
         }
 
         public void NamesLoader()
@@ -54,14 +58,17 @@ namespace Player1
                 {
                     PNames = Reader.ReadString();
                     Pairs = PNames.Split(',');
-                    if (Pairs[0] != "ChatMessage")
+                    if (Pairs[0] != "ChatMessage" && Pairs[0] != "Rooms")
                     {
                         for (int i = 0; i < Pairs.Length - 1; i++)
                         {
-                            if (!comboBox1.Items.Contains(Pairs[i].Split('.')[1]))
+                            if (!comboBox1.Items.Contains(Pairs[i].Split('.')[0]))
                             {
                                 comboBox1.Items.Add(Pairs[i].Split('.')[0]);
-                                listView1.Items.Add(Pairs[i].Split('.')[0], Pairs[i].Split('.')[1]);//name,status
+                                string n = Pairs[i].Split('.')[0];
+                                string ns = Pairs[i].Split('.')[1];
+                                var list = new ListViewItem(new string[] { n, ns });
+                                listView1.Items.Add(list);//name,status
                             }
                         }
                     }
@@ -69,14 +76,62 @@ namespace Player1
                     {
                         textBox2.Text += Pairs[1] + ": " + Pairs[2]; //name: msg
                     }
+                    else if (Pairs[0] == "Rooms")
+                    {
+                        Button btn = new Button();
+                        btn.Text = "Join";
+                        btn.Click += (s, g) => { MessageBox.Show("hiii"); };
+                        // listView2.Controls.Add(btn);
+
+                        string[] allroom = new string[Pairs.Length];
+                        listView2.Items.Clear();
+                        for (int i = 1; i < Pairs.Length - 1; i++)
+                        {
+                            allroom = Pairs[i].Split('.');
+                            string owner = allroom[1];
+                            string n = allroom[0];
+                            string stat = allroom[2];
+                            string le = allroom[3];
+                            string cat = allroom[4];
+
+                            ListViewItem list2 = new ListViewItem(new string[] { owner, stat, cat, le, n, "" });
+                            listView2.Items.Add(list2);
+
+                        }
+                    }
+                    else if (Pairs[0] == "WantToPlay")
+                    {
+                        //MessageBox.Show("incoming request");
+                        DialogResult ss = MessageBox.Show("ac cept","asas",MessageBoxButtons.YesNo);
+
+                        if (ss == DialogResult.Yes)
+                        {
+
+                            myVar = 1;
+                         //fire event
+                        }
+                        else if (ss == DialogResult.No)
+                        {
+                            MessageBox.Show("requestDenied");
+                        }
+                    }
+                            
+                      
+                    
                 }
                 catch { }
             }
         }
 
+
+
         private void button3_Click(object sender, EventArgs e)
         {
+            Writer = new BinaryWriter(Stream);
+            Writer.Write("JoinRoom" + "," + PlayersName + "," +","+ "owner" +","+ "RoomName");
         }
+
+
 
     
 
@@ -107,13 +162,6 @@ namespace Player1
         private void comboBox1_DropDown(object sender, EventArgs e)
         {
         }
-
-        private void button1_Click(object sender, EventArgs e) //create room button
-        {
-            Room rForm = new Room();
-            rForm.ShowDialog();
-        }
-
         private void button2_Click(object sender, EventArgs e)
         {
             string ChatMessage;
@@ -137,5 +185,45 @@ namespace Player1
             Receiver = comboBox1.SelectedItem.ToString();
         }
 
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void tabPage2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void listView1_MouseClick(object sender, MouseEventArgs e)
+        {
+            
+        }
+
+        private void listView3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void listView3_MouseClick(object sender, MouseEventArgs e)
+        {
+            MessageBox.Show(listView1.SelectedItems[0].ToString());
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            ShowOtherForm(this, new EventArgs());
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            Room NewRoom = new Room(this);
+            NewRoom.Show();
+        }
     }
 }

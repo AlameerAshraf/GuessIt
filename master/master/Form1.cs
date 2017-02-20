@@ -126,23 +126,23 @@ namespace master
 
                 if (Holder[0] == "ChatMessage") //"ChatMessage"+","+PlayersName+","+Receiver+","+textBox1.Text
                 {
-                    //MessageBox.Show(Holder[1] + " " + Holder[2] + " " + Holder[3]);
                     ReceiveMessageToSendToAnotherClient(Holder);
                 }
                 else if (Holder[0] == "SendRoom")
-                {
+                { //"SendRoom"+","+RoomName+","+RoomCategory+","+level.ToString()+ room satte 
                     Room NewRoom = new Room();
-                    NewRoom.RoomName = Holder[1];
-                    NewRoom.RoomLevel = Holder[2];
-                    NewRoom.RoomCat = Holder[3];
                     NewRoom.Owner = PlyersData[0];
+                    NewRoom.RoomName = Holder[1];
+                    NewRoom.RoomCat = Holder[2];
+                    NewRoom.RoomLevel = Holder[3];
                     NewRoom.Player = null;
-                    NewRoom.RoomStutes = Holder[6];
+                    NewRoom.RoomStutes = Holder[4];
 
-                    var lir = new ListViewItem(Holder);
+                    var lir = new ListViewItem(new string[] { Holder[1] , Holder[4] , PlyersData[0]});
                     PanelControlR.Items.Add(lir);
 
                     RoomsOfThePlayer.Add(NewRoom);
+                    RoomSender(Form1.players);
                 }
                 else if (Holder[0] == "ChangeRoomState")
                 {
@@ -156,6 +156,29 @@ namespace master
 
                     // Changing Procedure ! 
                 }
+
+                else if (Holder[0] =="JoinRoom")//"JoinRoom" + "," + PlayersName + "," +","+ "owner" +","+ "RoomName"
+                {
+                    Joinning();
+                }
+            }
+        }
+
+
+        public void Joinning ()
+        {
+            foreach (Player p in Form1.players)
+            {
+                if (p.PlyersData[0] == Holder[2])
+                {
+                    for (var i = 0; i < p.RoomsOfThePlayer.Count; i++)
+                    {
+                        if (RoomsOfThePlayer[i].RoomName == Holder[3])
+                        {
+                            ReceivePlayRequestToSendToAnotherClient(Holder[2], Holder[1]);
+                        }
+                    }
+                }
             }
         }
 
@@ -167,16 +190,32 @@ namespace master
             
             foreach (var element in PlayersList)
             { 
-                PDataSentToClients += element.PlyersData[0] + "." + element.PlyersData[1] + ",";                     
+                PDataSentToClients += element.PlyersData[0] + "." + element.PlyersData[1] + ",";
             }
             PDataSentToClients.Substring(0, PDataSentToClients.Length);
             WhoWrites.Write(PDataSentToClients);
         }
 
+        public void RoomSender (List<Player> PlayersList)
+        {
+            string RDataSentToClients = "Rooms" + ",";
+            Stream = new NetworkStream(Dummy);
+            WhoWrites = new BinaryWriter(Stream);
+            foreach (var element in PlayersList)
+            {
+                for (var i = 0; i < element.RoomsOfThePlayer.Count; i++)
+                {
+                    RDataSentToClients += element.RoomsOfThePlayer[i].Owner + "." + element.RoomsOfThePlayer[i].RoomName + "." + element.RoomsOfThePlayer[i].RoomStutes + "." + element.RoomsOfThePlayer[i].RoomLevel + "." + RoomsOfThePlayer[i].RoomCat + ",";
+                }
+            }
+          
+            WhoWrites.Write(RDataSentToClients);
+        }
+
 
         public void ConnectClient (string MessageFromAnotherClient)
         {
-            MessageBox.Show( this.PlyersData[0]);
+            //MessageBox.Show( this.PlyersData[0]);
             Stream = new NetworkStream(Dummy);
             WhoWrites = new BinaryWriter(Stream);
             WhoWrites.Write(MessageFromAnotherClient);
@@ -184,13 +223,23 @@ namespace master
 
         public void ReceiveMessageToSendToAnotherClient(string [] MessageInfromation)
         {
-            MessageBox.Show("aaaa");
+            //MessageBox.Show("aaaa");
             string Receiver = MessageInfromation[2];
             foreach(Player P in Form1.players)
             {
                 if (P.PlyersData[0] == Receiver)
                 {
                     P.ConnectClient("ChatMessage"+","+ MessageInfromation[1]+","+MessageInfromation[3]);
+                }
+            }
+        }
+        public void ReceivePlayRequestToSendToAnotherClient(string Owner , string Requester)
+        {
+            foreach (Player P in Form1.players)
+            {
+                if (P.PlyersData[0] == Owner)
+                {
+                    P.ConnectClient("WantToPlay"+","+ Requester);
                 }
             }
         }

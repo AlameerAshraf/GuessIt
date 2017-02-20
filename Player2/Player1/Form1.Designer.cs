@@ -187,6 +187,7 @@
             this.button1.TabIndex = 3;
             this.button1.Text = "Start Room !";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label3
             // 
@@ -220,6 +221,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.panel1);
             this.tabPage2.Controls.Add(this.listView2);
             this.tabPage2.Controls.Add(this.listView1);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
@@ -347,9 +349,9 @@
             // panel1
             // 
             this.panel1.Controls.Add(this.groupBox1);
-            this.panel1.Location = new System.Drawing.Point(12, 141);
+            this.panel1.Location = new System.Drawing.Point(68, 78);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(365, 158);
+            this.panel1.Size = new System.Drawing.Size(365, 232);
             this.panel1.TabIndex = 10;
             // 
             // groupBox1
@@ -413,7 +415,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(498, 393);
-            this.Controls.Add(this.panel1);
             this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
             this.Text = "Player - ";
