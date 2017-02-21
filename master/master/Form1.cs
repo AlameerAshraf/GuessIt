@@ -163,27 +163,21 @@ namespace master
                     // Changing Procedure ! 
                 }
 
-                else if (Holder[0] =="JoinRoom")//"JoinRoom" + "," + PlayersName + "," +","+ "owner" +","+ "RoomName"
+                else if (Holder[0] =="JoinRoom")//"JoinRoom"+","+PlayersName+","+RoomOwner+","+RoomName
                 {
-                    Joinning();
+                    Joinning(Holder[3], Holder[2], Holder[1]);
                 }
             }
         }
 
 
-        public void Joinning ()
+        public void Joinning (string RoomName , string OwnerRoom , string Requester)
         {
-            foreach (Player p in Form1.players)
+            foreach (Player P in Form1.players)
             {
-                if (p.PlyersData[0] == Holder[2])
+                if (P.PlyersData[0] == OwnerRoom)
                 {
-                    for (var i = 0; i < p.RoomsOfThePlayer.Count; i++)
-                    {
-                        if (RoomsOfThePlayer[i].RoomName == Holder[3])
-                        {
-                            ReceivePlayRequestToSendToAnotherClient(Holder[2], Holder[1]);
-                        }
-                    }
+                    P.ReceivePlayRequestToSendToAnotherClient(OwnerRoom, Requester);
                 }
             }
         }
@@ -229,13 +223,12 @@ namespace master
 
         public void ReceiveMessageToSendToAnotherClient(string [] MessageInfromation)
         {
-            //MessageBox.Show("aaaa");
             string Receiver = MessageInfromation[2];
             foreach(Player P in Form1.players)
             {
                 if (P.PlyersData[0] == Receiver)
                 {
-                    P.ConnectClient("ChatMessage"+","+ MessageInfromation[1]+","+MessageInfromation[3]);
+                    P.ConnectClient(MessageInfromation[0]+","+ MessageInfromation[1]+","+MessageInfromation[3]);
                 }
             }
         }
@@ -245,7 +238,7 @@ namespace master
             {
                 if (P.PlyersData[0] == Owner)
                 {
-                    P.ConnectClient("WantToPlay"+","+ Requester);
+                    P.ConnectClient("WantToPlay"+","+Requester);
                 }
             }
         }

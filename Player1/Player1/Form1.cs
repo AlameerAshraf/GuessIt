@@ -20,17 +20,18 @@ namespace Player1
 {
     public partial class Form1 : Form
     {
-        public int myVar;
-
-
-        public event EventHandler ShowOtherForm;
+        public delegate void delPassData(string Requester);
 
         public TcpClient Player;
         public NetworkStream Stream;
         public BinaryReader Reader;
         public BinaryWriter Writer;
+        Room newRoom;
         public string PlayersName;
-        string Receiver;
+        public string Receiver;
+        public string RoomName;
+        public string RoomOwner;
+        public string Requester;
         public Form1()
         {
             InitializeComponent();
@@ -58,7 +59,7 @@ namespace Player1
                 {
                     PNames = Reader.ReadString();
                     Pairs = PNames.Split(',');
-                    if (Pairs[0] != "ChatMessage" && Pairs[0] != "Rooms")
+                    if (Pairs[0] != "ChatMessage" && Pairs[0] != "Rooms" && Pairs[0] != "WantToPlay")
                     {
                         for (int i = 0; i < Pairs.Length - 1; i++)
                         {
@@ -78,11 +79,6 @@ namespace Player1
                     }
                     else if (Pairs[0] == "Rooms")
                     {
-                        Button btn = new Button();
-                        btn.Text = "Join";
-                        btn.Click += (s, g) => { MessageBox.Show("hiii"); };
-                        // listView2.Controls.Add(btn);
-
                         string[] allroom = new string[Pairs.Length];
                         listView2.Items.Clear();
                         for (int i = 1; i < Pairs.Length - 1; i++)
@@ -96,28 +92,22 @@ namespace Player1
 
                             ListViewItem list2 = new ListViewItem(new string[] { owner, stat, cat, le, n, "" });
                             listView2.Items.Add(list2);
-
                         }
                     }
                     else if (Pairs[0] == "WantToPlay")
                     {
-                        //MessageBox.Show("incoming request");
-                        DialogResult ss = MessageBox.Show("ac cept","asas",MessageBoxButtons.YesNo);
-
-                        if (ss == DialogResult.Yes)
+                        DialogResult Res = MessageBox.Show("Player :" + Pairs[1] + "s", "Join Request", MessageBoxButtons.YesNo);
+                        if (Res == DialogResult.Yes)
                         {
-
-                            myVar = 1;
-                         //fire event
+                            Requester = Pairs[1];
+                            delPassData del = new delPassData(newRoom.ActionToTakeFromUser);
+                            del(Requester);
                         }
-                        else if (ss == DialogResult.No)
+                        else
                         {
-                            MessageBox.Show("requestDenied");
+                            //somecancellation!
                         }
-                    }
-                            
-                      
-                    
+                    }  
                 }
                 catch { }
             }
@@ -144,6 +134,7 @@ namespace Player1
                 //Condition DataBase !
                 PlayersName = textBox5.Text; 
                 panel1.Visible = false;
+                textBox3.Text = PlayersName;
                 Thread Naming = new Thread(NamesLoader);
                 Naming.Start();
             }
@@ -187,8 +178,8 @@ namespace Player1
         private void button1_Click_1(object sender, EventArgs e)
         {
             //create new room 
-            Room NewRoom = new Room(this);
-            NewRoom.Show();
+            newRoom = new Room(this);
+            newRoom.Show();
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
@@ -218,7 +209,7 @@ namespace Player1
 
         private void button5_Click(object sender, EventArgs e)
         {
-            ShowOtherForm(this, new EventArgs());
+            //ShowOtherForm(this, new EventArgs());
         }
 
         private void button6_Click(object sender, EventArgs e)
@@ -230,7 +221,7 @@ namespace Player1
         {
             //join button 
             Writer = new BinaryWriter(Stream);
-            Writer.Write("JoinRoom" + "," + PlayersName + "," + "," + "owner" + "," + "RoomName");
+            Writer.Write("JoinRoom"+","+PlayersName+","+RoomOwner+","+RoomName);
         }
 
         private void button5_Click_1(object sender, EventArgs e)
@@ -238,6 +229,17 @@ namespace Player1
             ////watch button 
             //Writer = new BinaryWriter(Stream);
             //Writer.Write("WatchRoom" + "," + PlayersName + "," + "," + "owner" + "," + "RoomName");
+        }
+
+        private void listView2_MouseClick(object sender, MouseEventArgs e)
+        {
+            RoomName = listView2.SelectedItems[0].SubItems[0].Text;
+            RoomOwner = listView2.SelectedItems[0].SubItems[4].Text;
+        }
+
+        private void listView2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

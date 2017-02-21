@@ -21,21 +21,21 @@ namespace Player1
         {
             InitializeComponent();
             MyClient = IncomingForm;
-            MyClient.ShowOtherForm += action;
+            MyClient.ShowOtherForm += ActionToTakeFromUser;
         }
 
-        private void action(object sender, EventArgs e)
+        private void ActionToTakeFromUser(object sender, EventArgs e)
         {
-            
-            MessageBox.Show("Hello");
+            label1.Text = this.MyClient.Requester;
+            MessageBox.Show(this.MyClient.Requester);
         }
 
         private void Room_Load(object sender, EventArgs e)
         {
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        { // Onlin , Complete , Destroyed 
+        private void button1_Click_1(object sender, EventArgs e)
+        {
             if (!String.IsNullOrEmpty(textBox1.Text) && !String.IsNullOrEmpty(comboBox1.SelectedItem.ToString()))
             {
                 RoomName = textBox1.Text;
@@ -55,8 +55,8 @@ namespace Player1
 
             string RoomSt = "Online";
             MyClient.Writer = new System.IO.BinaryWriter(MyClient.Stream);
-            MyClient.Writer.Write("SendRoom"+","+RoomName+","+RoomCategory+","+level.ToString()+","+RoomSt);
+            MyClient.Writer.Write("SendRoom" + "," + RoomName + "," + RoomCategory + "," + level.ToString() + "," + RoomSt);
+            panel1.Visible = false;
         }
-
     }
 }
