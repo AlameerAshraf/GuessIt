@@ -127,8 +127,7 @@ namespace Player1
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Writer = new BinaryWriter(Stream);
-            Writer.Write("JoinRoom" + "," + PlayersName + "," +","+ "owner" +","+ "RoomName");
+           
         }
 
 
@@ -187,7 +186,9 @@ namespace Player1
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-           
+            //create new room 
+            Room NewRoom = new Room(this);
+            NewRoom.Show();
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
@@ -222,8 +223,21 @@ namespace Player1
 
         private void button6_Click(object sender, EventArgs e)
         {
-            Room NewRoom = new Room(this);
-            NewRoom.Show();
+            
+        }
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            //join button 
+            Writer = new BinaryWriter(Stream);
+            Writer.Write("JoinRoom" + "," + PlayersName + "," + "," + "owner" + "," + "RoomName");
+        }
+
+        private void button5_Click_1(object sender, EventArgs e)
+        {
+            ////watch button 
+            //Writer = new BinaryWriter(Stream);
+            //Writer.Write("WatchRoom" + "," + PlayersName + "," + "," + "owner" + "," + "RoomName");
         }
     }
 }

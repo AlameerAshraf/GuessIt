@@ -29,13 +29,15 @@ namespace master
 {
     public partial class Form1 : Form
     {
+        int numOfPlayers = 0;
         TcpListener Started;
         public static List<Player> players;
         bool Flag = true;
         public Form1()
         {
             InitializeComponent();
-            Control.CheckForIllegalCrossThreadCalls = false; 
+            Control.CheckForIllegalCrossThreadCalls = false;
+            label2.Text = numOfPlayers.ToString();
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -54,6 +56,8 @@ namespace master
             players = new List<Player>(); 
             Thread TH2 = new Thread(MainFunction);
             TH2.Start();
+            button1.Text = "Running";
+            button1.BackColor = System.Drawing.Color.Green;
         }
         public void MainFunction()
         {
@@ -61,6 +65,8 @@ namespace master
             {
                 Player Pl = new Player(Started.AcceptSocket(), listView1 , listView2);
                 players.Add(Pl);
+                numOfPlayers++;
+                label2.Text = numOfPlayers.ToString();
             }  
         }
         private void button2_Click(object sender, EventArgs e)
