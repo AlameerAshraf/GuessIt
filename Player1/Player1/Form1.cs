@@ -21,6 +21,7 @@ namespace Player1
     public partial class Form1 : Form
     {
         public delegate void delPassData(string Requester);
+        public delegate void word();
 
         public TcpClient Player;
         public NetworkStream Stream;
@@ -32,6 +33,8 @@ namespace Player1
         public string RoomName;
         public string RoomOwner;
         public string Requester;
+        public string gameword;
+        public string anotherplyer;
         public Form1()
         {
             InitializeComponent();
@@ -59,7 +62,7 @@ namespace Player1
                 {
                     PNames = Reader.ReadString();
                     Pairs = PNames.Split(',');
-                    if (Pairs[0] != "ChatMessage" && Pairs[0] != "Rooms" && Pairs[0] != "WantToPlay")
+                    if (Pairs[0] != "ChatMessage" && Pairs[0] != "Rooms" && Pairs[0] != "WantToPlay" && Pairs[0] != "AcceptPlay")
                     {
                         for (int i = 0; i < Pairs.Length - 1; i++)
                         {
@@ -96,7 +99,7 @@ namespace Player1
                     }
                     else if (Pairs[0] == "WantToPlay")
                     {
-                        DialogResult Res = MessageBox.Show("Player :" + Pairs[1] + "s", "Join Request", MessageBoxButtons.YesNo);
+                        DialogResult Res = MessageBox.Show("Player :" + Pairs[1] + "Wants To Play With You In Your Room", "Join Request", MessageBoxButtons.YesNo);
                         if (Res == DialogResult.Yes)
                         {
                             Requester = Pairs[1];
@@ -105,9 +108,23 @@ namespace Player1
                         }
                         else
                         {
-                            //somecancellation!
+                            MessageBox.Show("You Cancelled The Request , Wait For another one!");
                         }
-                    }  
+                    }
+                    else if (Pairs[0] == "AcceptPlay")
+                    {
+                        gameword = Pairs[1];
+                        anotherplyer = Pairs[2];
+                        //The "invoke" call tells the form "Please execute this code in your thread rather than mine."
+                        //Executes the specified delegate on the thread that owns the control's underlying window handle.
+                        this.Invoke(
+                           new MethodInvoker(delegate ()
+                           {
+                               Room RequestedRoom = new Room(this, 1);
+                               RequestedRoom.Show();
+                           }));
+
+                    }
                 }
                 catch { }
             }
@@ -178,7 +195,7 @@ namespace Player1
         private void button1_Click_1(object sender, EventArgs e)
         {
             //create new room 
-            newRoom = new Room(this);
+            newRoom = new Room(this,0);
             newRoom.Show();
         }
 

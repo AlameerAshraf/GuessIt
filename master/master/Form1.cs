@@ -167,10 +167,34 @@ namespace master
                 {
                     Joinning(Holder[3], Holder[2], Holder[1]);
                 }
+                else if (Holder[0] == "AcceptPlay")//"AcceptPlay" + "," + RoomName + "," + ","+ requester +","+ MyClient.PlayersName + "," + gameword
+                {
+                    Accepting(Holder[1], Holder[3], Holder[2], Holder[4]);
+                }
+                else if (Holder[0] == "GamePlay")//ownwer , player,score,playerstat
+                {
+                    ReceiveMessageToSendToAnotherClient(new string[] {  });
+                }
             }
         }
 
 
+        public void Accepting(string RoomName, string OwnerRoom,string Requester, string gameword)
+        {
+            foreach (Player P in Form1.players)
+            {
+                if (P.PlyersData[0] == OwnerRoom)
+                {
+                    for (var i = 0; i < P.RoomsOfThePlayer.Count; i++)
+                    {
+                        if (P.RoomsOfThePlayer[i].RoomName == RoomName)
+                        {
+                            P.ReceiveMessageToSendToAnotherClient(new string[] { "AcceptPlay", gameword,Requester, OwnerRoom });
+                        }
+                    }
+                }
+            }
+        }
         public void Joinning (string RoomName , string OwnerRoom , string Requester)
         {
             foreach (Player P in Form1.players)
@@ -229,6 +253,25 @@ namespace master
                 if (P.PlyersData[0] == Receiver)
                 {
                     P.ConnectClient(MessageInfromation[0]+","+ MessageInfromation[1]+","+MessageInfromation[3]);
+                }
+            }
+        }
+
+        public void ReceiveGamePlayToSendToAnotherClient(string[] MessageInfromation)
+        {
+            string Receiver = MessageInfromation[2];
+            foreach (Player P in Form1.players)
+            {
+                if (P.PlyersData[0] == Receiver)
+                {
+                    for (var i = 0; i < P.RoomsOfThePlayer.Count; i++)
+                    {
+                        if (P.RoomsOfThePlayer[i].Player == MessageInfromation[3])
+                        {
+                            P.ConnectClient(MessageInfromation[0] + "," + MessageInfromation[1] + "," + MessageInfromation[3]);
+                        }
+                    }
+                    
                 }
             }
         }

@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SqlClient;
 
 namespace Player1
 {
@@ -16,26 +11,88 @@ namespace Player1
         string RoomName;
         string RoomCategory;
         int level;
+        int RoomTypeflag;
 
-        public Room(Form1 IncomingForm)
+        public Room(Form1 IncomingForm, int Flag)
         {
             InitializeComponent();
             MyClient = IncomingForm;
-  
+            Control.CheckForIllegalCrossThreadCalls = false;
+            RoomTypeflag = Flag;
         }
 
         public void ActionToTakeFromUser(string s)
         {
-            MessageBox.Show("RECCCCC");
-            label1.Text = this.MyClient.Requester;
-            
+            string Wordtosent = GettingTheRandomGameWord();
+            owner.Text = MyClient.PlayersName;
+            plyerone.Text = s;
+            label4.Text = Wordtosent;
+            // MessageBox.Show(Wordtosent);
+            MyClient.Writer = new System.IO.BinaryWriter(MyClient.Stream);
+            MyClient.Writer.Write("AcceptPlay"+","+RoomName+","+s+","+MyClient.PlayersName+","+Wordtosent);
         }
 
+
+
+        public string GettingTheRandomGameWord()
+        {
+            string GameLevel = null;
+            string Worditself = null;
+            string connections = @"Data Source=DESKTOP-TLQ675A\ALAMEERASHRAF;Initial Catalog=project;Integrated Security=True";
+            SqlConnection con = new SqlConnection(connections);
+
+            SqlCommand cmd = new SqlCommand("get_rand", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add("@category", SqlDbType.VarChar).Value = RoomCategory;
+            if (level == 1)
+            {
+                GameLevel = "easy";
+            }
+            else if (level == 2)
+            {
+                GameLevel = "medium";
+            }
+            else if (level == 3)
+            {
+                GameLevel = "hard";
+            }
+            cmd.Parameters.Add("@level", SqlDbType.VarChar).Value = GameLevel;
+
+            con.Open();
+
+            SqlParameter Go = cmd.Parameters.Add("@word", SqlDbType.VarChar);
+            Go.Direction = ParameterDirection.ReturnValue;
+            SqlDataReader Word = cmd.ExecuteReader();
+            try
+            {
+                while (Word.Read())
+                {
+                    Worditself = Word.GetString(0);
+                }
+            }
+            catch
+            {
+                Worditself = "Alameer";
+            }
+            
+            return Worditself;
+        }
         private void Room_Load(object sender, EventArgs e)
         {
+            if (RoomTypeflag == 1)
+            {
+                StartingGame();
+            }
+            else { }
         }
-
-        private void button1_Click_1(object sender, EventArgs e)
+        public void StartingGame()
+        {
+            panel1.Visible = false;
+            owner.Text = MyClient.PlayersName;
+            plyerone.Text = MyClient.anotherplyer;
+            label4.Text = MyClient.gameword;
+        }
+        private void button1_Click(object sender, EventArgs e)
         {
             if (!String.IsNullOrEmpty(textBox1.Text) && !String.IsNullOrEmpty(comboBox1.SelectedItem.ToString()))
             {

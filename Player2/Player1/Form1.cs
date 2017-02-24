@@ -1,36 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using master;
-using System.Reflection;
 
-//aaa
+
 namespace Player1
 {
     public partial class Form1 : Form
     {
-        public event EventHandler ShowOtherForm;
+        public delegate void delPassData(string Requester);
+        public delegate void word();
 
         public TcpClient Player;
         public NetworkStream Stream;
         public BinaryReader Reader;
         public BinaryWriter Writer;
+        Room newRoom;
         public string PlayersName;
         public string Receiver;
         public string RoomName;
         public string RoomOwner;
         public string Requester;
+        public string gameword;
+        public string anotherplyer;
         public Form1()
         {
             InitializeComponent();
@@ -58,7 +52,7 @@ namespace Player1
                 {
                     PNames = Reader.ReadString();
                     Pairs = PNames.Split(',');
-                    if (Pairs[0] != "ChatMessage" && Pairs[0] != "Rooms" && Pairs[0] != "WantToPlay")
+                    if (Pairs[0] != "ChatMessage" && Pairs[0] != "Rooms" && Pairs[0] != "WantToPlay" && Pairs[0]!= "AcceptPlay")
                     {
                         for (int i = 0; i < Pairs.Length - 1; i++)
                         {
@@ -99,17 +93,33 @@ namespace Player1
                         if (Res == DialogResult.Yes)
                         {
                             Requester = Pairs[1];
-                            ShowOtherForm(this , new EventArgs());
+                            delPassData del = new delPassData(newRoom.ActionToTakeFromUser);
+                            del(Requester);
                         }
                         else
                         {
-                            //somecancellation!
+                            MessageBox.Show("You Cancelled The Request , Wait For another one!");
                         }
-                    }  
+                    }
+                    else if (Pairs[0] == "AcceptPlay")
+                    {
+                        gameword = Pairs[1];
+                        anotherplyer = Pairs[2];
+                        //The "invoke" call tells the form "Please execute this code in your thread rather than mine."
+                        //Executes the specified delegate on the thread that owns the control's underlying window handle.
+                        this.Invoke(
+                           new MethodInvoker(delegate ()
+                          {
+                              Room RequestedRoom = new Room(this, 1);
+                              RequestedRoom.Show();
+                          }));
+                       
+                    }
                 }
                 catch { }
             }
         }
+
 
 
 
@@ -176,8 +186,8 @@ namespace Player1
         private void button1_Click_1(object sender, EventArgs e)
         {
             //create new room 
-            Room NewRoom = new Room(this);
-            NewRoom.Show();
+            newRoom = new Room(this ,0);
+            newRoom.Show();
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
@@ -207,7 +217,7 @@ namespace Player1
 
         private void button5_Click(object sender, EventArgs e)
         {
-            ShowOtherForm(this, new EventArgs());
+            //ShowOtherForm(this, new EventArgs());
         }
 
         private void button6_Click(object sender, EventArgs e)

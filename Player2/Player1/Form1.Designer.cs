@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
             "",
             "sd",
             "ameer"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("");
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -100,7 +100,6 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.panel1);
             this.tabPage1.Controls.Add(this.textBox4);
             this.tabPage1.Controls.Add(this.label5);
             this.tabPage1.Controls.Add(this.listView3);
@@ -121,9 +120,9 @@
             // panel1
             // 
             this.panel1.Controls.Add(this.groupBox1);
-            this.panel1.Location = new System.Drawing.Point(100, 86);
+            this.panel1.Location = new System.Drawing.Point(11, 12);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(337, 228);
+            this.panel1.Size = new System.Drawing.Size(475, 375);
             this.panel1.TabIndex = 10;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
@@ -206,8 +205,8 @@
             this.columnHeader8,
             this.columnHeader9});
             this.listView3.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem7,
-            listViewItem8});
+            listViewItem1,
+            listViewItem2});
             this.listView3.Location = new System.Drawing.Point(6, 140);
             this.listView3.Name = "listView3";
             this.listView3.Size = new System.Drawing.Size(455, 193);
@@ -440,6 +439,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(498, 397);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
             this.Text = "Player - ";
