@@ -2,6 +2,8 @@
 using System.Data;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Drawing;
+using System.Linq;
 
 namespace Player1
 {
@@ -12,6 +14,9 @@ namespace Player1
         string RoomCategory;
         int level;
         int RoomTypeflag;
+        string Gameword;
+        string[] arrayOfLabel;
+        GameControl GC;
 
         public Room(Form1 IncomingForm, int Flag)
         {
@@ -21,12 +26,52 @@ namespace Player1
             RoomTypeflag = Flag;
         }
 
+        //===========================
+        public void TurnEnable(int t)
+        {
+            MessageBox.Show("enable of req_room");
+            if (t==1)
+                this.panel2.Enabled = true;
+            else
+                this.panel2.Enabled = false;
+        }
+
+        public void TurnEnable2(int t)
+        {
+            MessageBox.Show("enable of new_room");
+            if (t == 1)
+                this.panel2.Enabled = true;
+            else
+                this.panel2.Enabled = false;
+        }
+        //============================
+        public void DimmChar(char c)
+        {
+  
+            GC.DisableChar(c); 
+        }
+        //============================
         public void ActionToTakeFromUser(string s)
         {
             string Wordtosent = GettingTheRandomGameWord();
             owner.Text = MyClient.PlayersName;
             plyerone.Text = s;
             label4.Text = Wordtosent;
+            //=============
+            try
+            {
+                this.Invoke(
+                           new MethodInvoker(delegate ()
+                           {
+                               GameControl GC = new GameControl(Wordtosent, MyClient);
+                               GC.Parent = this.panel2;
+                               GC.Top = 80;
+                               GC.Enabled = true;
+                           }));
+            }
+            catch(Exception e) { MessageBox.Show("Control ERROr "+e); }     
+            //=============
+
             // MessageBox.Show(Wordtosent);
             MyClient.Writer = new System.IO.BinaryWriter(MyClient.Stream);
             MyClient.Writer.Write("AcceptPlay"+","+RoomName+","+s+","+MyClient.PlayersName+","+Wordtosent);
@@ -38,7 +83,7 @@ namespace Player1
         {
             string GameLevel = null;
             string Worditself = null;
-            string connections = @"Data Source=DESKTOP-TLQ675A\ALAMEERASHRAF;Initial Catalog=project;Integrated Security=True";
+            string connections = @"Data Source=.;Initial Catalog=project;Integrated Security=True";
             SqlConnection con = new SqlConnection(connections);
 
             SqlCommand cmd = new SqlCommand("get_rand", con);
@@ -91,7 +136,14 @@ namespace Player1
             owner.Text = MyClient.PlayersName;
             plyerone.Text = MyClient.anotherplyer;
             label4.Text = MyClient.gameword;
+            //==========
+            GC = new GameControl(MyClient.gameword, MyClient);
+            GC.Parent = this.panel2;
+            GC.Top = 80;
+            TurnEnable(0); //disables player2's room
+            //==========
         }
+
         private void button1_Click(object sender, EventArgs e)
         {
             if (!String.IsNullOrEmpty(textBox1.Text) && !String.IsNullOrEmpty(comboBox1.SelectedItem.ToString()))
@@ -115,6 +167,28 @@ namespace Player1
             MyClient.Writer = new System.IO.BinaryWriter(MyClient.Stream);
             MyClient.Writer.Write("SendRoom" + "," + RoomName + "," + RoomCategory + "," + level.ToString() + "," + RoomSt);
             panel1.Visible = false;
+            
+
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -7,7 +7,7 @@ using System.IO;
 using System.Threading;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 
 
 
@@ -170,10 +170,17 @@ namespace master
                 else if (Holder[0] == "AcceptPlay")//"AcceptPlay" + "," + RoomName + "," + ","+ requester +","+ MyClient.PlayersName + "," + gameword
                 {
                     Accepting(Holder[1], Holder[3], Holder[2], Holder[4]);
+                  
                 }
                 else if (Holder[0] == "GamePlay")//ownwer , player,score,playerstat
                 {
                     ReceiveMessageToSendToAnotherClient(new string[] {  });
+                }
+                else if (Holder[0] == "ClickedChar")//"ClickedChar," + c.ToString() + ",1," + MyClient.PlayersName + "," + MyClient.Requester
+                {
+                  
+                    //MessageBox.Show("at server : "+Holder[1]);
+                    ReceiveMessageToSendToAnotherClient(new string[] {"OpponentClickedChar",Holder[1],Holder[4],Holder[2]});
                 }
             }
         }
@@ -247,11 +254,13 @@ namespace master
 
         public void ReceiveMessageToSendToAnotherClient(string [] MessageInfromation)
         {
+            MessageBox.Show("sending char to "+MessageInfromation[2]);
             string Receiver = MessageInfromation[2];
             foreach(Player P in Form1.players)
             {
                 if (P.PlyersData[0] == Receiver)
                 {
+                    MessageBox.Show("found receiver");
                     P.ConnectClient(MessageInfromation[0]+","+ MessageInfromation[1]+","+MessageInfromation[3]);
                 }
             }

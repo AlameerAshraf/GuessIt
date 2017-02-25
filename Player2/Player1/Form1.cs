@@ -1,11 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using master;
+using System.Reflection;
 
-
+//aaa
 namespace Player1
 {
     public partial class Form1 : Form
@@ -25,6 +35,8 @@ namespace Player1
         public string Requester;
         public string gameword;
         public string anotherplyer;
+
+        Room RequestedRoom;
         public Form1()
         {
             InitializeComponent();
@@ -52,7 +64,7 @@ namespace Player1
                 {
                     PNames = Reader.ReadString();
                     Pairs = PNames.Split(',');
-                    if (Pairs[0] != "ChatMessage" && Pairs[0] != "Rooms" && Pairs[0] != "WantToPlay" && Pairs[0]!= "AcceptPlay")
+                    if (Pairs[0] != "ChatMessage" && Pairs[0] != "Rooms" && Pairs[0] != "WantToPlay" && Pairs[0] != "AcceptPlay"&& Pairs[0] != "OpponentClickedChar")
                     {
                         for (int i = 0; i < Pairs.Length - 1; i++)
                         {
@@ -89,7 +101,7 @@ namespace Player1
                     }
                     else if (Pairs[0] == "WantToPlay")
                     {
-                        DialogResult Res = MessageBox.Show("Player :" + Pairs[1] + "s", "Join Request", MessageBoxButtons.YesNo);
+                        DialogResult Res = MessageBox.Show("Player :" + Pairs[1] + "Wants To Play With You In Your Room", "Join Request", MessageBoxButtons.YesNo);
                         if (Res == DialogResult.Yes)
                         {
                             Requester = Pairs[1];
@@ -109,17 +121,34 @@ namespace Player1
                         //Executes the specified delegate on the thread that owns the control's underlying window handle.
                         this.Invoke(
                            new MethodInvoker(delegate ()
-                          {
-                              Room RequestedRoom = new Room(this, 1);
-                              RequestedRoom.Show();
-                          }));
-                       
+                           {
+                               RequestedRoom = new Room(this, 1);
+                               RequestedRoom.Show();
+                           }));
+
+                    }
+                    else if (Pairs[0] == "OpponentClickedChar")
+                    {
+                        //Pairs[1] contains clicked 
+                        if (Pairs[2] == "1")
+                        {
+
+                            RequestedRoom.TurnEnable(0);
+                            newRoom.TurnEnable2(1);
+                        }
+                        else
+                        {
+                            RequestedRoom.TurnEnable(1);
+                            newRoom.TurnEnable2(0);
+                            
+                        }
+                        RequestedRoom.DimmChar(char.Parse(Pairs[1]));
+                        newRoom.DimmChar(char.Parse(Pairs[1]));
                     }
                 }
                 catch { }
             }
         }
-
 
 
 
@@ -186,7 +215,7 @@ namespace Player1
         private void button1_Click_1(object sender, EventArgs e)
         {
             //create new room 
-            newRoom = new Room(this ,0);
+            newRoom = new Room(this,0);
             newRoom.Show();
         }
 

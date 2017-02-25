@@ -35,6 +35,8 @@ namespace Player1
         public string Requester;
         public string gameword;
         public string anotherplyer;
+
+        Room RequestedRoom;
         public Form1()
         {
             InitializeComponent();
@@ -62,7 +64,7 @@ namespace Player1
                 {
                     PNames = Reader.ReadString();
                     Pairs = PNames.Split(',');
-                    if (Pairs[0] != "ChatMessage" && Pairs[0] != "Rooms" && Pairs[0] != "WantToPlay" && Pairs[0] != "AcceptPlay")
+                    if (Pairs[0] != "ChatMessage" && Pairs[0] != "Rooms" && Pairs[0] != "WantToPlay" && Pairs[0] != "AcceptPlay"&& Pairs[0] != "OpponentClickedChar")
                     {
                         for (int i = 0; i < Pairs.Length - 1; i++)
                         {
@@ -120,10 +122,28 @@ namespace Player1
                         this.Invoke(
                            new MethodInvoker(delegate ()
                            {
-                               Room RequestedRoom = new Room(this, 1);
+                               RequestedRoom = new Room(this, 1);
                                RequestedRoom.Show();
                            }));
 
+                    }
+                    else if (Pairs[0] == "OpponentClickedChar")
+                    {
+                        //pairs[2] clicked char : 1- correct  0 -wrong
+                        //Pairs[1] contains clicked char
+                        if(Pairs[2]=="1")
+                        {
+                            RequestedRoom.TurnEnable(0);
+                            newRoom.TurnEnable2(1);
+                        }
+                        else
+                        {
+                            RequestedRoom.TurnEnable(1);
+                            newRoom.TurnEnable2(0);
+                        }
+
+                        RequestedRoom.DimmChar(char.Parse(Pairs[1]));
+                        newRoom.DimmChar(char.Parse(Pairs[1]));
                     }
                 }
                 catch { }
